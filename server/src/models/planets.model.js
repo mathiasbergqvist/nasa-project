@@ -1,3 +1,4 @@
+import { httpGetAllPlanets } from "../routes/planets/planets.controller";
 const fs = require("fs");
 const path = require("path");
 const { parse } = require("csv-parse");
@@ -35,7 +36,9 @@ const loadPlanetsData = () => {
   });
 };
 
+const httpGetAllPlanets = () => habitablePlanets;
+
 module.exports = {
-  planets: habitablePlanets,
+  httpGetAllPlanets,
   loadPlanetsData,
 };
