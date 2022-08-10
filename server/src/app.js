@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const planetsRouter = require("./routes/planets/planets.router");
+const launchesRouter = require("./routes/launches/launches.router");
 const cors = require("cors");
 const morgan = require("morgan");
 
@@ -14,7 +15,7 @@ app.use(
   })
 );
 // Setup logging with Morgan
-app.use(morgan("combined"));
+app.use(morgan("combined")); //Use "dev" for dev output
 
 app.use(express.json());
 // Serve client
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Internal routes
 app.use(planetsRouter);
+app.use(launchesRouter);
 
 // Route to index.html
 app.get("/", (req, res) => {
