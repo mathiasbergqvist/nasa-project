@@ -22,8 +22,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Internal routes
-app.use(planetsRouter);
-app.use(launchesRouter);
+app.use("/planets", planetsRouter);
+app.use("/launches", launchesRouter);
 
 // Route to index.html
 app.get("/*", (req, res) => {
