@@ -10,7 +10,8 @@
     "server": "npm run watch --prefix server",
     "client": "npm run start --prefix client",
     "watch": "npm run server & npm run client",
-    "deploy": "npm run build --prefix client && npm run start --prefix server"
+    "deploy": "npm run build --prefix client && npm run start --prefix server",
+    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/mathiasbergqvist/nasa-project/issues"
   },
-  "homepage": "https://github.com/mathiasbergqvist/nasa-project#readme"
+  "homepage": "https://github.com/mathiasbergqvist/nasa-project#readme",
+  "dependencies": {
+    "pm2": "^5.2.0"
+  }
 }
