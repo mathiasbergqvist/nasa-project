@@ -10,7 +10,7 @@ const app = express();
 // CORS policy
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:3001",
     optionsSuccessStatus: 200,
   })
 );
