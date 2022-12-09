@@ -2,7 +2,6 @@ const launchesDb = require("./launches.mongo");
 const planets = require("./planets.mongo");
 const launches = new Map();
 
-let latestFlightNumber = 100;
 const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
@@ -58,16 +57,18 @@ const saveLaunch = async (launch) => {
   );
 };
 
-const addNewLaunch = (launch) => {
-  latestFlightNumber++;
+const scheduleNewLaunch = async (launch) => {
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
-  launches.set(latestFlightNumber, {
+  const newLaunch = {
     ...launch,
-    flightNumber: latestFlightNumber,
     success: true,
     upcoming: true,
     customers: ["ZTM", "NASA"],
-  });
+    flightNumber: newFlightNumber,
+  };
+
+  await saveLaunch(newLaunch);
 };
 
 const abortLaunchById = (launchId) => {
@@ -80,7 +81,7 @@ saveLaunch(launch);
 
 module.exports = {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   existsLaunchWithId,
   abortLaunchById,
 };
