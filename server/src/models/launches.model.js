@@ -1,6 +1,5 @@
 const launchesDb = require("./launches.mongo");
 const planets = require("./planets.mongo");
-const launches = new Map();
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 
@@ -15,7 +14,11 @@ const launch = {
   success: true,
 };
 
-const existsLaunchWithId = (launchId) => launches.has(launchId);
+const existsLaunchWithId = async (launchId) => {
+  return await launchesDb.findOne({
+    flightNumber: launchId,
+  });
+};
 
 const getLatestFlightNumber = async () => {
   const latestLaunch = await launchesDb.findOne().sort("-flightNumber");
@@ -46,13 +49,13 @@ const saveLaunch = async (launch) => {
     throw new Error("No matching planet was found");
   }
 
-  await launchesDb.updateOne(
+  await launchesDb.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber,
     },
     launch,
     {
-      upsert: true,
+      upsert: true, // Create if there is no one present
     }
   );
 };
@@ -71,10 +74,18 @@ const scheduleNewLaunch = async (launch) => {
   await saveLaunch(newLaunch);
 };
 
-const abortLaunchById = (launchId) => {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
+const abortLaunchById = async (launchId) => {
+  const aborted = await launchesDb.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    {
+      upcoming: false,
+      success: false,
+    }
+  );
+
+  return aborted.modifiedCount === 1;
 };
 
 saveLaunch(launch);
