@@ -18,6 +18,11 @@ const mongoConnect = async () => {
   });
 };
 
+const mongoDisconnect = async () => {
+  await mongoose.disconnect();
+};
+
 module.exports = {
   mongoConnect,
+  mongoDisconnect,
 };
