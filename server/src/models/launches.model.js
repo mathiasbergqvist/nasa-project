@@ -16,29 +16,49 @@ const launch = {
   success: true, //success
 };
 
-saveLaunch(launch);
+const loadLaunchData = async () => {
+  try {
+    const response = await axios.post(process.env.SPACEX_API_URL, {
+      query: {},
+      options: {
+        populate: [
+          {
+            path: "rocket",
+            select: {
+              name: 1,
+            },
+          },
+          {
+            path: "payloads",
+            select: {
+              customers: 1,
+            },
+          },
+        ],
+      },
+    });
 
-const loadLaunchesData = async () => {
-  console.log("Downloading launch data...");
-  await axios.post(process.env.SPACEX_API_URL, {
-    query: {},
-    options: {
-      populate: [
-        {
-          path: "rocket",
-          select: {
-            name: 1,
-          },
-        },
-        {
-          path: "payload",
-          select: {
-            customers: 1,
-          },
-        },
-      ],
-    },
-  });
+    const launchDocs = response.data.docs;
+
+    for (const launchDoc of launchDocs) {
+      const payloads = launchDoc["payloads"];
+      const customers = payloads.flatMap((payload) => payload["customers"]);
+
+      const launch = {
+        flightNumber: launchDoc["flight_number"],
+        mission: launchDoc["name"],
+        rocket: launchDoc["rocket"]["name"],
+        launchDate: launchDoc["date_local"],
+        upcoming: launchDoc["upcoming"],
+        success: launchDoc["success"],
+        customers,
+      };
+
+      console.log(`${launch.flightNumber} - ${launch.mission}`);
+    }
+  } catch (error) {
+    console.error(`Error when fetching data: ${error}`);
+  }
 };
 
 const existsLaunchWithId = async (launchId) => {
@@ -122,5 +142,5 @@ module.exports = {
   scheduleNewLaunch,
   existsLaunchWithId,
   abortLaunchById,
-  loadLaunchesData,
+  loadLaunchData,
 };
