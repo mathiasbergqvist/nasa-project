@@ -103,14 +103,17 @@ const getLatestFlightNumber = async () => {
   return latestLaunch.flightNumber;
 };
 
-const getAllLaunches = async () =>
-  await launchesDb.find(
-    {},
-    {
-      _id: 0,
-      __v: 0,
-    }
-  );
+const getAllLaunches = async (skip, limit) =>
+  await launchesDb
+    .find(
+      {},
+      {
+        _id: 0,
+        __v: 0,
+      }
+    )
+    .skip(skip)
+    .limit(limit);
 
 const saveLaunch = async (launch) => {
   await launchesDb.findOneAndUpdate(
