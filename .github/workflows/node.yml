@@ -1,4 +1,4 @@
-name: NASA Project CI
+name: NASA Project CI Workflow
 on:
   push:
     branches: [ master ]
