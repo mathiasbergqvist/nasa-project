@@ -1,11 +1,13 @@
-name: NASA Project CI Workflow
+name: NASA Project CI
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
   build:
+    env:
+      CI: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,3 +17,4 @@ jobs:
           node-version: '16'
       - run: npm install
       - run: npm run build --prefix client
+      - run: npm test
