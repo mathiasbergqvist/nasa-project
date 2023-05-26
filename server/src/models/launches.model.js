@@ -153,8 +153,6 @@ const abortLaunchById = async (launchId) => {
   return aborted.modifiedCount === 1;
 };
 
-saveLaunch(launch);
-
 module.exports = {
   getAllLaunches,
   scheduleNewLaunch,
